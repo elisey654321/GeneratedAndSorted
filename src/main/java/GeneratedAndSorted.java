@@ -5,15 +5,28 @@ import java.util.*;
 
 public class GeneratedAndSorted {
 
-    private static final ArrayList<String> stringList = new ArrayList<>();
+    private Integer countLine = 2_000_000;
+    private Integer sizeSplit = 100_000;
+    private String nameSortedFile = "";
 
     public static void main(String[] args) {
+        GeneratedAndSorted generatedAndSorted = new GeneratedAndSorted(2_000_000, 500_000);
+        System.out.println(generatedAndSorted.getNameSortedFile());
+    }
+
+
+    public String getNameSortedFile() {
+        return nameSortedFile;
+    }
+
+    public GeneratedAndSorted(Integer countLine, Integer sizeSplit) {
+        this.countLine = countLine;
+        this.sizeSplit = sizeSplit;
 
         try {
             Long beginTime = System.currentTimeMillis();
-            Integer countLine = 2_000_000;
             String nameFile = generatedFile(countLine);
-            ArrayList<String> files = splitFile(nameFile, 100_000);
+            ArrayList<String> files = splitFile(nameFile, sizeSplit);
             ArrayList<String> sortedFiles = sortedFiles(files);
             getSortedFile(sortedFiles, countLine);
 
@@ -27,13 +40,15 @@ public class GeneratedAndSorted {
         }
     }
 
+    private static final ArrayList<String> stringList = new ArrayList<>();
+
     private static void deleteFiles(ArrayList<String> sortedFiles) throws IOException {
-        for (String nameFile:sortedFiles) {
+        for (String nameFile : sortedFiles) {
             Files.delete(Paths.get(nameFile));
         }
     }
 
-    private static void getSortedFile(ArrayList<String> sortedFiles, Integer countLine) throws IOException {
+    private void getSortedFile(ArrayList<String> sortedFiles, Integer countLine) throws IOException {
 
         String nameSortedFile = "sortedFile.txt";
         FileWriter writer = new FileWriter(nameSortedFile);
@@ -58,9 +73,9 @@ public class GeneratedAndSorted {
             }
             String s = valueNameFileTreeMap.firstKey();
 
-            Integer indexSep_1 = s.indexOf(":")+1;
-            Integer indexSep_2 = s.substring(indexSep_1+1).indexOf(":") + indexSep_1 + 1;
-            String result = s.substring(indexSep_1, indexSep_2) + ":" + s.substring(0,indexSep_1-1);
+            Integer indexSep_1 = s.indexOf(":") + 1;
+            Integer indexSep_2 = s.substring(indexSep_1 + 1).indexOf(":") + indexSep_1 + 1;
+            String result = s.substring(indexSep_1, indexSep_2) + ":" + s.substring(0, indexSep_1 - 1);
 
             writer.append(result);
             writer.append("\n");
@@ -73,6 +88,7 @@ public class GeneratedAndSorted {
         }
 
         writer.close();
+        this.nameSortedFile = nameSortedFile;
     }
 
     private static ArrayList<String> sortedFiles(ArrayList<String> files) throws IOException {
