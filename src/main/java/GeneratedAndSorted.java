@@ -14,9 +14,26 @@ public class GeneratedAndSorted {
         System.out.println(generatedAndSorted.getNameSortedFile());
     }
 
-
     public String getNameSortedFile() {
         return nameSortedFile;
+    }
+
+    public GeneratedAndSorted() {
+        try {
+            Long beginTime = System.currentTimeMillis();
+            String nameFile = generatedFile(countLine);
+            ArrayList<String> files = splitFile(nameFile, sizeSplit);
+            ArrayList<String> sortedFiles = sortedFiles(files);
+            getSortedFile(sortedFiles, countLine);
+
+            deleteFiles(files);
+            deleteFiles(sortedFiles);
+
+            System.out.println((System.currentTimeMillis() - beginTime));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public GeneratedAndSorted(Integer countLine, Integer sizeSplit) {
